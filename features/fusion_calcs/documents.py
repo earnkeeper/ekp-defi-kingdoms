@@ -1,58 +1,99 @@
 import time
+import math
 
+def format_document(rarity, rate, fiat_symbol):
+    box_stats = [
+        {
+            "name": "Normal",
+            "cost": 20,
+            "probability": [0.9, 0.1, 0, 0, 0]
+        },
+        {
+            "name": "Premium",
+            "cost": 100,
+            "probability": [0.5, 0.4, 0.09, 0.01, 0]
+        },
+        {
+            "name": "Ultra",
+            "cost": 500,
+            "probability": [0, 0.55, 0.4, 0.049, 0.001]
+        }
+    ]
 
-def calc_rarity(id, rarity, fusion_materials, commons, boxes, costs, rate, fiat_symbol):
-    normal_cost = costs[0] * rate
-    normal_total_cost = normal_cost * boxes[0]
-    normal_color = "danger"
+    rarities = [
+        {
+            "name": "Common",
+            "fusion_commons": 1
+        },
+        {
+            "name": "Rare",
+            "fusion_commons": 4
+        },
+        {
+            "name": "Epic",
+            "fusion_commons": 24
+        },
+        {
+            "name": "Legend",
+            "fusion_commons": 192
+        },
+        {
+            "name": "Mythic",
+            "fusion_commons": 1920
+        },
+        {
+            "name": "Meta",
+            "fusion_commons": 23040
+        }
+    ]
 
-    premium_cost = costs[1] * rate
-    premium_total_cost = premium_cost * boxes[1]
-    premium_color = "danger"
+    commons_needed = rarities[rarity]["fusion_commons"]
 
-    if (normal_total_cost < premium_total_cost):
-        normal_color = "success"
-    else:
-        premium_color = "success"
+    box_calcs = {}
+    cheapest_cost = 999999999999
+
+    for box_i in range(0, 3):
+        box_stat = box_stats[box_i]
+        box_commons = 0
+        for rarity_i in range(0, 5):
+            box_commons += box_stat["probability"][rarity_i] * \
+                rarities[rarity_i]["fusion_commons"]
+
+        boxes_to_this_rarity = math.ceil(commons_needed / box_commons)
+
+        total_cost = boxes_to_this_rarity * box_stat["cost"]
+
+        box_is_cheapest = False
+
+        if total_cost < cheapest_cost:
+            box_is_cheapest = True
+            cheapest_cost = total_cost
+
+        box_calcs[box_stat["name"].lower()] = {
+            "name": box_stat["name"],
+            "cost": box_stat["cost"] * rate,
+            "boxes": boxes_to_this_rarity,
+            "total_cost": total_cost * rate,
+            "color": "success" if box_is_cheapest else "danger"
+        }
+
+    fusion_materials = f'2 x {rarities[rarity - 1]["name"]} @ Lv {rarity + 1}'
 
     return {
-        "id": id,
+        "id": rarities[rarity]["name"].lower(),
         "updated": time.time(),
-        "commonsNeeded": commons,
+        "commonsNeeded": commons_needed,
         "fiatSymbol": fiat_symbol,
         "fusionMaterials": fusion_materials,
-        "normalBoxes": boxes[0],
-        "normalColor": normal_color,
-        "normalCost": normal_cost,
-        "normalTotalCost": normal_total_cost,
-        "premiumBoxes": boxes[1],
-        "premiumColor": premium_color,
-        "premiumCost": premium_cost,
-        "premiumTotalCost": premium_total_cost,
-        "rarity": rarity,
+        "calcs": box_calcs,
+        "rarity": rarities[rarity]["name"],
     }
 
 
 def documents(rate, fiat_symbol):
-    return [
-        calc_rarity(
-            "rare", "Rare", "2 x Common @ Lv 2",
-                    4, [4, 4], [20, 100], rate, fiat_symbol
-        ),
-        calc_rarity(
-            "epic", "Epic", "2 x Rare @ Lv 3",
-                    24, [19, 9], [20, 100], rate, fiat_symbol
-        ),
-        calc_rarity(
-            "legend", "Legend", "2 x Epic @ Lv 4",
-            192, [148, 73], [20, 100], rate, fiat_symbol
-        ),
-        calc_rarity(
-            "mythic", "Mythic", "2 x Legend @ Lv 5",
-            1920, [1477, 738], [20, 100], rate, fiat_symbol
-        ),
-        calc_rarity(
-            "meta", "Meta", "2 x Mythic @ Lv 6",
-                    23040, [17723, 8800], [20, 100], rate, fiat_symbol
-        ),
-    ]
+    return list(
+        map(
+            lambda rarity: format_document(rarity, rate, fiat_symbol),
+            range(1, 6)
+        )
+    )

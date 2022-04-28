@@ -41,6 +41,17 @@ def Row(children, class_name=None):
     }
 
 
+def Div(children, class_name=None, style=None):
+    return {
+        "_type": "Div",
+        "props": cleanNullTerms({
+            "className": class_name,
+            "children": children,
+            "style": style,
+        })
+    }
+
+
 def Col(children, class_name=None):
     return {
         "_type": "Col",
@@ -86,15 +97,17 @@ def Badge(color, children, class_name=None):
     }
 
 
-def Column(id, title=None, format=None, right=None, width=None, grow=None, cell=None):
+def Column(id, value=None, title=None, format=None, right=None, width=None, min_width=None, grow=None, cell=None):
     return cleanNullTerms({
-        "id": id,
-        "title": title,
+        "cell": cell,
         "format": format,
-        "right": right,
-        "width": width,
         "grow": grow,
-        "cell": cell
+        "id": id,
+        "minWidth": min_width,
+        "right": right,
+        "title": title,
+        "value": value,
+        "width": width,
     })
 
 
@@ -194,6 +207,14 @@ def format_template(template, values):
         "method": "formatTemplate",
         "params": [template, values]
     }
+
+
+def switch_case(on, cases):
+    return {
+        "method": "switchCase",
+        "params": [on, cases]
+    }
+
 
 def commify(value):
     return {

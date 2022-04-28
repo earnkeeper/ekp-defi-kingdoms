@@ -1,5 +1,6 @@
 
 import json
+
 import eventlet
 import socketio
 
@@ -7,7 +8,10 @@ from features.fusion_calcs.controller import on_client_state_changed
 
 PORT = 3001
 sio = socketio.Server(cors_allowed_origins='*')
-app = socketio.WSGIApp(sio)
+app = socketio.WSGIApp(sio, static_files={
+    '/meta.json': { 'filename': 'static/meta.json'},
+    '/market.png': { 'filename': 'static/market.png'}
+})
 
 
 @sio.on('client-state-changed')
