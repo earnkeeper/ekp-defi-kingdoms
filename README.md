@@ -1,6 +1,6 @@
-# Defi Kingdoms EarnKeeper.io Plugin
+# Meta Bomb EarnKeeper.io Plugin
 
-The (EarnKeeper.io)[https://github.com/earnkeeper] plugin for [Defi Kingdoms](https://defikingdoms.com/).
+The (EarnKeeper.io)[https://github.com/earnkeeper] plugin for [Meta Bomb](https://metabomb.io/)).
 
 ## Requirements
 
