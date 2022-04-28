@@ -1,5 +1,0 @@
-{
-  "execMap": {
-    "py": "EVENTLET_HUB=poll python3"
-  }
-}
