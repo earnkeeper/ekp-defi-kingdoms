@@ -73,7 +73,7 @@ def Icon(name, class_name=None, size=None):
     }
 
 
-def Datatable(data, columns, class_name=None, busy_when=None, show_export=None):
+def Datatable(data, columns, class_name=None, busy_when=None, show_export=None, pagination=None):
     return {
         "_type": "Datatable",
         "props": cleanNullTerms({
@@ -81,7 +81,8 @@ def Datatable(data, columns, class_name=None, busy_when=None, show_export=None):
             "className": class_name,
             "columns": columns,
             "data": data,
-            "showExport": show_export
+            "showExport": show_export,
+            "pagination": pagination
         })
     }
 
