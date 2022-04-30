@@ -57,63 +57,31 @@ def table_row():
             ),
             Column(
                 id="quantity",
-                title="Qty Available",
+                title="Qty",
+                right=True,
                 min_width="160px",
-                right=True,
-                format=commify("$.quantity")
-            ),
-            Column(
-                id="staking",
-                title="Stake MTB",
-                width="160px",
-                right=True,
-                format=format_template("{{ mtb }} ea.", {
-                    "mtb": commify("$.staking")
-                })
-            ),
-
-            Column(
-                id="stakeCost",
-                title="Stake Cost",
-                right=True,
-                width="160px",
-                format=format_template(
-                    "{{ cost }} ea.",
-                    {
-                        "cost": format_currency("$.stakeCost", "$.fiatSymbol"),
-                    }
-                )
+                format=commify("$.quantity"),
+                cell=qty_cell()
             ),
             Column(
                 id="cost",
-                title="Purchase Cost",
+                title="Box Cost",
                 right=True,
-                width="160px",
-                format=format_template(
-                    "{{ symbol }} {{ cost }} ea.",
-                    {
-                        "symbol": "$.fiatSymbol", "cost": "$.cost"
-                    }
-                )
+                width="200px",
+                cell=cost_cell()
             ),
             Column(
                 id="totalCost",
-                title="Total Cost",
+                title="Max Cost",
                 right=True,
-                width="160px",
-                format=format_template(
-                    "{{ cost }} ea.",
-                    {
-                        "cost": format_currency("$.totalCost", "$.fiatSymbol"),
-                    }
-                )
+                width="200px",
+                cell=total_cost_cell()
             ),
             Column(
-                id="limit",
-                title="Per Wallet",
-                right=True,
-                width="160px"
-            ),
+                id="spacer",
+                title="",
+                width="10px"
+            )
 
         ]
     )
@@ -132,9 +100,113 @@ def box_cell(name, rarities):
                 ]
             ),
             Col(
-                class_name="col-auto font-small-2",
+                class_name="col-auto font-small-1",
                 children=[
                     Span(content=rarities)
+                ]
+            )
+        ]
+    )
+
+
+def qty_cell():
+    return Row(
+        children=[
+            Col(
+                class_name="col-12",
+                children=[
+                    Span(
+                        class_name="font-small-4 float-right",
+                        content=format_template("{{ limit }} per wallet", {
+                            "limit": "$.limit"
+                        })
+                    )
+                ]
+            ),
+            Col(
+                class_name="col-12 ",
+                children=[
+                    Span(
+                        class_name="float-right font-small-1",
+                        content=format_template("{{ quantity }} total", {
+                            "quantity": commify("$.quantity")
+                        })
+
+                    )
+                ]
+            )
+        ]
+    )
+
+
+def cost_cell():
+    return Row(
+        children=[
+            Col(
+                class_name="col-12",
+                children=[
+                    Span(
+                        class_name="font-medium-1 font-weight-bold float-right",
+                        content=format_template(
+                            "{{ symbol }} {{ cost }}",
+                            {
+                                "symbol": "$.fiatSymbol",
+                                "cost": commify("$.totalCost")
+                            }
+                        )
+                    )
+                ]
+            ),
+            Col(
+                class_name="col-12",
+                children=[
+                    Span(
+                        class_name="float-right font-small-2",
+                        content=format_template(
+                            "{{ symbol }} {{ cost }} + {{ symbol }} {{ stakeCost }}", {
+                                "symbol": "$.fiatSymbol",
+                                "cost": "$.cost",
+                                "stakeCost": "$.stakeCost"
+                            })
+
+                    )
+                ]
+            )
+        ]
+    )
+
+
+def total_cost_cell():
+    return Row(
+        children=[
+            Col(
+                class_name="col-12",
+                children=[
+                    Span(
+                        class_name="font-medium-1 font-weight-bold float-right",
+                        content=format_template(
+                            "{{ symbol }} {{ cost }}",
+                            {
+                                "symbol": "$.fiatSymbol",
+                                "cost": commify("$.maxCost")
+                            }
+                        )
+                    )
+                ]
+            ),
+            Col(
+                class_name="col-12",
+                children=[
+                    Span(
+                        class_name="float-right font-small-2",
+                        content=format_template(
+                            "{{ symbol }} {{ totalCost }} x {{ limit }}", {
+                                "symbol": "$.fiatSymbol",
+                                "totalCost": "$.totalCost",
+                                "limit": "$.limit"
+                            })
+
+                    )
                 ]
             )
         ]
