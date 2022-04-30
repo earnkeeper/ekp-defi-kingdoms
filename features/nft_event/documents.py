@@ -9,7 +9,9 @@ def documents(usdRate, mtbRate, fiat_symbol):
             "cost": 19.99 * usdRate,
             "totalCost": 19.99 * usdRate + 3000 * mtbRate,
             "limit": 4,
-            "fiatSymbol": fiat_symbol
+            "fiatSymbol": fiat_symbol,
+            "mtbRate": mtbRate,
+            "rarities": "Common 90%, Rare 10%"
         },
         {
             "id": 'premium',
@@ -20,7 +22,9 @@ def documents(usdRate, mtbRate, fiat_symbol):
             "totalCost": 99.99 * usdRate + 10000 * mtbRate,
             "cost": 99.99 * usdRate,
             "limit": 2,
-            "fiatSymbol": fiat_symbol
+            "fiatSymbol": fiat_symbol,
+            "mtbRate": mtbRate,
+            "rarities": "Common 50%, Rare 40%, Epic 9%, Legend 1%"
         },
         {
             "id": 'ultra',
@@ -31,6 +35,8 @@ def documents(usdRate, mtbRate, fiat_symbol):
             "totalCost": 499.99 * usdRate + 50000 * mtbRate,
             "cost": 499.99 * usdRate,
             "limit": 1,
-            "fiatSymbol": fiat_symbol
+            "fiatSymbol": fiat_symbol,
+            "mtbRate": mtbRate,
+            "rarities": "Rare 55%, Epic 40%, Legend 4.9%, Mythic 0.1%"
         }
     ]

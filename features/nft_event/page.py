@@ -8,7 +8,18 @@ def page():
     return Container(
         children=[
             title_row(),
+
             Span(content="The Metabomb Initial NFT Offering event starts at 1pm UTC - 30 Apr '22. Check your total costs below before buying!"),
+            Div(class_name="mt-1", children=[]),
+            Span(
+                class_name="d-block",
+                content=format_template(
+                    "Current MTB price: {{ price }}",
+                    {
+                        "price": format_currency(f'$["nft-event"][0].mtbRate', '$["nft-event"][0].fiatSymbol'),
+                    }
+                )
+            ),
             table_row()
         ]
     )
@@ -33,7 +44,7 @@ def title_row():
 
 def table_row():
     return Datatable(
-        class_name="mt-3",
+        class_name="mt-2",
         data=documents('nft-event'),
         busy_when=is_busy(collection('nft-event')),
         pagination=False,
@@ -41,7 +52,8 @@ def table_row():
         columns=[
             Column(
                 id="box",
-                width="130px",
+                width="300px",
+                cell=box_cell("$.box", "$.rarities")
             ),
             Column(
                 id="quantity",
@@ -103,5 +115,27 @@ def table_row():
                 width="160px"
             ),
 
+        ]
+    )
+
+
+def box_cell(name, rarities):
+    return Row(
+        children=[
+            Col(
+                class_name="col-12",
+                children=[
+                    Span(
+                        class_name="font-medium-1 font-weight-bold",
+                        content=name
+                    )
+                ]
+            ),
+            Col(
+                class_name="col-auto font-small-2",
+                children=[
+                    Span(content=rarities)
+                ]
+            )
         ]
     )
