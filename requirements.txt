@@ -1,3 +1,6 @@
 python-socketio
 eventlet
 requests
+Flask
+python-engineio
+flask-cors

@@ -1,17 +1,26 @@
 
-import json
-
-import eventlet
-import socketio
-
 from features.fusion_calcs.controller import on_client_state_changed
+import json
+import socketio
+import eventlet
+import eventlet.wsgi
+from flask import Flask, send_from_directory
+from flask_cors import CORS, cross_origin
+
+# https://github.com/miguelgrinberg/python-socketio/blob/main/examples/server/aiohttp/app.py
 
 PORT = 3001
-sio = socketio.Server(cors_allowed_origins='*')
-app = socketio.WSGIApp(sio, static_files={
-    '/meta.json': { 'filename': 'static/meta.json'},
-    '/market.png': { 'filename': 'static/market.png'}
-})
+
+sio = socketio.Server(async_mode='eventlet', cors_allowed_origins='*')
+app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
+app.wsgi_app = socketio.WSGIApp(sio, app.wsgi_app)
+
+@app.route('/static/<path:path>')
+@cross_origin
+def meta(path):
+    return send_from_directory("static", path)
 
 
 @sio.on('client-state-changed')
