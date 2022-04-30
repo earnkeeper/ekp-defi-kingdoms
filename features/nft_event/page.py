@@ -8,17 +8,14 @@ def page():
     return Container(
         children=[
             title_row(),
-
-            Span(content="The Metabomb Initial NFT Offering event starts at 1pm UTC - 30 Apr '22. Check your total costs below before buying!"),
-            Div(class_name="mt-1", children=[]),
             Span(
                 class_name="d-block",
-                content=format_template(
-                    "Current MTB price: {{ price }}",
-                    {
-                        "price": format_currency(f'$["nft-event"][0].mtbRate', '$["nft-event"][0].fiatSymbol'),
-                    }
-                )
+                content="The Metabomb Initial NFT Offering event starts at 1pm UTC - 30 Apr '22."
+            ),
+            Div(children=[], class_name="mt-1"),
+            Span(
+                class_name="d-block",
+                content="Check your total costs below before buying!"
             ),
             table_row()
         ]
@@ -64,8 +61,15 @@ def table_row():
                 cell=qty_cell()
             ),
             Column(
+                id="stake",
+                title="Staking Ea.",
+                right=True,
+                width="200px",
+                cell=staking_cell()
+            ),
+            Column(
                 id="cost",
-                title="Box Cost",
+                title="Cost Ea.",
                 right=True,
                 width="200px",
                 cell=cost_cell()
@@ -204,6 +208,41 @@ def total_cost_cell():
                                 "symbol": "$.fiatSymbol",
                                 "totalCost": "$.totalCost",
                                 "limit": "$.limit"
+                            })
+
+                    )
+                ]
+            )
+        ]
+    )
+
+
+def staking_cell():
+    return Row(
+        children=[
+            Col(
+                class_name="col-12",
+                children=[
+                    Span(
+                        class_name="font-medium-1 font-weight-bold float-right",
+                        content=format_template(
+                            "{{ symbol }} {{ cost }}",
+                            {
+                                "symbol": "$.fiatSymbol",
+                                "cost": "$.stakeCost"
+                            }
+                        )
+                    )
+                ]
+            ),
+            Col(
+                class_name="col-12",
+                children=[
+                    Span(
+                        class_name="float-right font-small-2",
+                        content=format_template(
+                            "{{ staking }} MTB", {
+                                "staking": commify("$.staking"),
                             })
 
                     )
