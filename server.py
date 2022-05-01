@@ -1,6 +1,5 @@
 
 from features.fusion_calcs.controller import on_client_state_changed
-from features.nft_event.controller import on_client_state_changed_nft_event
 import json
 import socketio
 import eventlet
@@ -27,7 +26,6 @@ def meta(path):
 @sio.on('client-state-changed')
 def on_event(sid, data):
     on_client_state_changed(sio, sid, json.loads(data))
-    on_client_state_changed_nft_event(sio, sid, json.loads(data))
 
 
 if __name__ == '__main__':
