@@ -5,5 +5,6 @@
   "github": "https://github.com/earnkeeper/ekp-metabomb-profit-calc",
   "image": "/static/market.jpg",
   "mainPage": "fusioncosts",
-  "description": "How many boxes do you need to open to fuse a Legendary Hero? Answers here"
+  "description": "How many boxes do you need to open to fuse a Legendary Hero? Answers here",
+  "features": ["Profit Calculator"]
 }
