@@ -1,4 +1,3 @@
-import requests
 from features.fusion_calcs.documents import documents
 from features.fusion_calcs.page import page
 from sdk.coingecko import latest_price
@@ -8,7 +7,7 @@ from sdk.sockets import emit_busy, emit_documents, emit_done, emit_menu, emit_pa
 
 def on_client_state_changed(sio, sid, event):
     emit_busy(sio, sid, "fusioncalcs")
-    emit_menu(sio, sid, 'herobox', 'Fusion Costs', 'fusioncosts', 'cil-calculator')
+    emit_menu(sio, sid, 'herobox', 'Fusion Costs', 'fusioncosts', 'box')
     emit_page(sio, sid, "fusioncosts", page())
 
     currency = selected_currency(event)
